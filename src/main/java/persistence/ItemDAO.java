@@ -1,6 +1,5 @@
 package persistence;
 
-import dto.ItemDTO;
 import model.Item;
 import util.DBConnection;
 
@@ -15,6 +14,7 @@ public class ItemDAO {
     private static final String DELETE_SQL = "DELETE FROM items WHERE item_code = ?";
     private static final String UPDATE_SQL = "UPDATE items SET item_name = ?, description = ?, price = ?, quantity = ? WHERE item_code = ?";
 
+    // ✅ Create Item
     public int create(Item item) throws SQLException {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
@@ -42,6 +42,7 @@ public class ItemDAO {
         }
     }
 
+    // ✅ Get All Items
     public List<Item> findAll() throws SQLException {
         List<Item> list = new ArrayList<>();
         try (Connection conn = DBConnection.getConnection();
@@ -58,13 +59,13 @@ public class ItemDAO {
                 item.setQuantity(rs.getInt("quantity"));
                 list.add(item);
             }
-
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
         return list;
     }
 
+    // ✅ Delete Item by code
     public boolean delete(String itemCode) throws SQLException {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(DELETE_SQL)) {
@@ -77,6 +78,7 @@ public class ItemDAO {
         }
     }
 
+    // ✅ Update Item
     public boolean update(Item item) throws SQLException {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(UPDATE_SQL)) {
@@ -94,51 +96,28 @@ public class ItemDAO {
         }
     }
 
-    public Item getItemById(int id) {
-        return null;
-    }
 
-    public class itemDAO {
-        public ItemDTO findByItemCode(String itemCode) throws Exception {
-            String sql = "SELECT item_code, item_name, price FROM items WHERE item_code = ?";
-            try (Connection conn = DBConnection.getConnection();
-                 PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setString(1, itemCode);
-                ResultSet rs = ps.executeQuery();
-                if (rs.next()) {
-                    ItemDTO item = new ItemDTO();
-                    item.setItemCode(rs.getString("item_code"));
-                    item.setItemName(rs.getString("item_name"));
-                    item.setPrice(rs.getDouble("price"));
-                    return item;
-                }
-                return null;
-            }
-        }
-    }
-
-    public Item findByCodeOrName(String searchTerm) throws SQLException {
-        String sql = "SELECT * FROM items WHERE item_code = ? OR item_name = ?";
+    // ✅ Search item by item code only
+    public Item findByCode(String itemCode) throws SQLException {
+        String sql = "SELECT id, item_code, item_name, price FROM items WHERE item_code = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, searchTerm);
-            ps.setString(2, searchTerm);
+
+            ps.setString(1, itemCode);
+
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     Item item = new Item();
-                    item.setId(rs.getInt("id"));
-                    item.setItemCode(rs.getString("item_code"));
-                    item.setItemName(rs.getString("item_name"));
-                    item.setDescription(rs.getString("description"));
-                    item.setPrice(rs.getDouble("price"));
-                    item.setQuantity(rs.getInt("quantity"));
+                    item.setId(rs.getInt("id"));                  // set item id
+                    item.setItemCode(rs.getString("item_code"));  // set item code
+                    item.setItemName(rs.getString("item_name"));  // set item name
+                    item.setPrice(rs.getDouble("price"));        // set price
                     return item;
                 }
             }
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return null;
+        return null; // not found
     }
 }
-

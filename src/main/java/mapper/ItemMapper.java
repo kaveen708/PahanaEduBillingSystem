@@ -11,7 +11,6 @@ public class ItemMapper {
         item.setId(dto.getId());
         item.setItemCode(dto.getItemCode());
         item.setItemName(dto.getItemName());
-        item.setDescription(dto.getDescription());
         item.setPrice(dto.getPrice());
         item.setQuantity(dto.getQuantity());
         return item;
@@ -23,7 +22,6 @@ public class ItemMapper {
         dto.setId(entity.getId());
         dto.setItemCode(entity.getItemCode());
         dto.setItemName(entity.getItemName());
-        dto.setDescription(entity.getDescription());
         dto.setPrice(entity.getPrice());
         dto.setQuantity(entity.getQuantity());
         return dto;
