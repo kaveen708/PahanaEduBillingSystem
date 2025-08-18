@@ -1,10 +1,10 @@
 package servlet;
 
 import dto.CustomerDTO;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
 import service.CustomerService;
 
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
 import java.io.IOException;
 
 @WebServlet("/searchCustomer")
@@ -16,7 +16,8 @@ public class CustomerSearchServlet extends HttpServlet {
         String account = req.getParameter("accountNumber");
         resp.setContentType("application/json");
         try {
-            CustomerDTO c = service.getByAccountNumber(account);
+            // You already had a findByAccountNumber in your service/dao
+            CustomerDTO c = service.findByAccountNumber(account);
             if (c == null) {
                 resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
                 resp.getWriter().write("{\"error\":\"Customer not found\"}");
