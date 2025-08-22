@@ -14,7 +14,7 @@ public class CustomerMapper {
         c.setName(dto.getName());
         c.setAddress(dto.getAddress());
         c.setPhoneNumber(dto.getPhoneNumber());
-        c.setUnitConsume(dto.getUnitConsume());
+        c.setUnitConsume((int) dto.getUnitConsume());
         c.setCreatedAt(LocalDateTime.now());
         return c;
     }
@@ -28,6 +28,7 @@ public class CustomerMapper {
         dto.setAddress(entity.getAddress());
         dto.setPhoneNumber(entity.getPhoneNumber());
         dto.setUnitConsume(entity.getUnitConsume());
+        
         return dto;
     }
 }

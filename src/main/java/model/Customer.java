@@ -8,7 +8,7 @@ public class Customer {
     private String name;
     private String address;
     private String phoneNumber;
-    private double unitConsume;
+    private int unitConsume;
     private LocalDateTime createdAt;
 
     // Getters & Setters
@@ -27,9 +27,11 @@ public class Customer {
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 
-    public double getUnitConsume() { return unitConsume; }
-    public void setUnitConsume(double unitConsume) { this.unitConsume = unitConsume; }
+    public int getUnitConsume() { return unitConsume; }
+    public void setUnitConsume(int unitConsume) { this.unitConsume = unitConsume; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+
 }
