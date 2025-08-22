@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
@@ -18,13 +19,20 @@ public class DeleteItemServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String itemCode = req.getParameter("itemCode");
+        HttpSession session = req.getSession();
+
         try {
-            itemService.deleteItem(itemCode);
-            // Redirect to the items page to reload the list after deletion
-            resp.sendRedirect(req.getContextPath() + "/items");
+            boolean deleted = itemService.deleteItem(itemCode);
+            if (deleted) {
+                session.setAttribute("message", "Item deleted successfully!");
+            } else {
+                session.setAttribute("error", "Item not found or could not be deleted.");
+            }
         } catch (Exception e) {
-            req.setAttribute("error", "Error deleting item: " + e.getMessage());
-            req.getRequestDispatcher("/items").forward(req, resp);
+            session.setAttribute("error", "Error deleting item: " + e.getMessage());
         }
+
+        // Always redirect to avoid form resubmission
+        resp.sendRedirect(req.getContextPath() + "/items");
     }
 }
