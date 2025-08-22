@@ -9,6 +9,7 @@ public class UserMapper {
         user.setUserId(dto.getUserId());
         user.setUsername(dto.getUsername());
         user.setPassword(dto.getPassword());
+        user.setRole(dto.getRole());
         return user;
     }
 
@@ -17,6 +18,7 @@ public class UserMapper {
         dto.setUserId(entity.getUserId());
         dto.setUsername(entity.getUsername());
         dto.setPassword(entity.getPassword());
+        dto.setRole(entity.getRole());
         return dto;
     }
 }
