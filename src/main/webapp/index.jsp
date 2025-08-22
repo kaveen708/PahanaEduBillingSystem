@@ -85,7 +85,7 @@
     <section class="hero">
         <div class="overlay">
             <h2>Welcome to the Customer Management System</h2>
-            <a href="register.jsp" class="btn">Login to System</a>
+            <a href="login.jsp" class="btn">Login to System</a>
         </div>
     </section>
 </div>
