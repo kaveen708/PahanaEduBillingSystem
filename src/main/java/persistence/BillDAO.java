@@ -1,10 +1,13 @@
 package persistence;
 
+import dto.BillDTO;
 import model.Bill;
 import model.BillItem;
 import util.DBConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class BillDAO {
@@ -18,6 +21,7 @@ public class BillDAO {
     private static final String UPDATE_CUSTOMER_UNITS =
             "UPDATE customers SET unit_consume = COALESCE(unit_consume,0) + ? WHERE id = ?";
 
+    // Create bill
     public int createBill(Bill bill) throws SQLException, ClassNotFoundException {
         try (Connection conn = DBConnection.getConnection()) {
             conn.setAutoCommit(false);
@@ -38,7 +42,7 @@ public class BillDAO {
                     }
                 }
 
-                // bill items
+                // Insert bill items
                 try (PreparedStatement ps = conn.prepareStatement(INSERT_BILL_ITEM)) {
                     for (BillItem it : bill.getItems()) {
                         ps.setInt(1, billId);
@@ -52,7 +56,7 @@ public class BillDAO {
                     ps.executeBatch();
                 }
 
-                // update customer's unit_consume by total qty
+                // Update customer unit consumption
                 int totalUnits = bill.getItems().stream().mapToInt(BillItem::getQuantity).sum();
                 try (PreparedStatement ps = conn.prepareStatement(UPDATE_CUSTOMER_UNITS)) {
                     ps.setInt(1, totalUnits);
@@ -71,11 +75,53 @@ public class BillDAO {
         }
     }
 
-    public Bill getBillById(int billId) {
-        return null;
+    public List<Bill> searchBills(String customerId, String paymentMethod, String date) throws SQLException, ClassNotFoundException {
+        List<Bill> bills = new ArrayList<>();
+        StringBuilder sql = new StringBuilder(
+                "SELECT id, customer_id, total_amount, paid_amount, balance, payment_method, created_at FROM bills WHERE 1=1"
+        );
+
+        if (customerId != null && !customerId.isEmpty()) sql.append(" AND customer_id LIKE ?");
+        if (paymentMethod != null && !paymentMethod.isEmpty()) sql.append(" AND payment_method = ?");
+        if (date != null && !date.isEmpty()) sql.append(" AND DATE(created_at) = ?");
+        sql.append(" ORDER BY created_at DESC");
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            int index = 1;
+            if (customerId != null && !customerId.isEmpty()) ps.setString(index++, "%" + customerId + "%");
+            if (paymentMethod != null && !paymentMethod.isEmpty()) ps.setString(index++, paymentMethod);
+            if (date != null && !date.isEmpty()) ps.setString(index++, date);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Bill bill = new Bill();
+                    bill.setId(rs.getInt("id"));
+                    bill.setCustomerId(rs.getInt("customer_id"));
+                    bill.setTotalAmount(rs.getDouble("total_amount"));
+                    bill.setPaidAmount(rs.getDouble("paid_amount"));
+                    bill.setBalance(rs.getDouble("balance"));
+                    bill.setPaymentMethod(rs.getString("payment_method"));
+                    bill.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+
+                    // Do NOT load items here if you only want bills
+                    // bill.setItems(getBillItems(bill.getId(), conn));
+
+                    bills.add(bill);
+                }
+            }
+        }
+
+        return bills;
     }
+
 
     public List<Bill> getAllBills() {
         return null;
+    }
+
+    public int saveBill(BillDTO bill) {
+        return 0;
     }
 }

@@ -2,10 +2,8 @@ package mapper;
 
 import dto.BillDTO;
 import dto.BillItemDTO;
-import dto.ItemDTO;
 import model.Bill;
 import model.BillItem;
-import model.Item;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,11 +19,9 @@ public class BillMapper {
         bill.setPaidAmount(dto.getPaidAmount());
         bill.setBalance(dto.getBalance());
         bill.setPaymentMethod(dto.getPaymentMethod());
+        bill.setCreatedAt(dto.getCreatedAt());
         if (dto.getItems() != null) {
-            List<BillItem> items = dto.getItems().stream()
-                    .map(BillMapper::toEntityItem)
-                    .collect(Collectors.toList());
-            bill.setItems(items);
+            bill.setItems(dto.getItems().stream().map(BillMapper::toEntityItem).collect(Collectors.toList()));
         }
         return bill;
     }
@@ -51,11 +47,9 @@ public class BillMapper {
         dto.setPaidAmount(entity.getPaidAmount());
         dto.setBalance(entity.getBalance());
         dto.setPaymentMethod(entity.getPaymentMethod());
+        dto.setCreatedAt(entity.getCreatedAt());
         if (entity.getItems() != null) {
-            List<BillItemDTO> items = entity.getItems().stream()
-                    .map(BillMapper::toDTOItem)
-                    .collect(Collectors.toList());
-            dto.setItems(items);
+            dto.setItems(entity.getItems().stream().map(BillMapper::toDTOItem).collect(Collectors.toList()));
         }
         return dto;
     }
@@ -72,32 +66,8 @@ public class BillMapper {
         return dto;
     }
 
-    // ✅ If you want Item <-> ItemDTO mapping inside BillMapper
-    public static ItemDTO toItemDTO(Item item) {
-        if (item == null) return null;
-        ItemDTO dto = new ItemDTO();
-        dto.setId(item.getId());
-        dto.setItemCode(item.getItemCode());
-        dto.setItemName(item.getItemName());
-        dto.setPrice(item.getPrice());
-        return dto;
-    }
-
-    public static Item toItemEntity(ItemDTO dto) {
-        if (dto == null) return null;
-        Item item = new Item();
-        item.setId(dto.getId());
-        item.setItemCode(dto.getItemCode());
-        item.setItemName(dto.getItemName());
-        item.setPrice(dto.getPrice());
-        return item;
-    }
-
-    // ✅ Convert List<Bill> to List<BillDTO>
     public static List<BillDTO> toDTOList(List<Bill> bills) {
         if (bills == null) return null;
-        return bills.stream()
-                .map(BillMapper::toDTO)
-                .collect(Collectors.toList());
+        return bills.stream().map(BillMapper::toDTO).collect(Collectors.toList());
     }
 }

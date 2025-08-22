@@ -1,5 +1,6 @@
 package dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class BillDTO {
@@ -9,7 +10,18 @@ public class BillDTO {
     private double paidAmount;
     private double balance;
     private String paymentMethod;
+    private LocalDateTime createdAt;
     private List<BillItemDTO> items;
+    private String customerName;
+
+    public String getCustomerName() {
+        return customerName;
+    }
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -28,6 +40,9 @@ public class BillDTO {
 
     public String getPaymentMethod() { return paymentMethod; }
     public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
     public List<BillItemDTO> getItems() { return items; }
     public void setItems(List<BillItemDTO> items) { this.items = items; }

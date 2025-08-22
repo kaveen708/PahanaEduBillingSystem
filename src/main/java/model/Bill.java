@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class Bill {
@@ -9,6 +10,7 @@ public class Bill {
     private double paidAmount;
     private double balance;
     private String paymentMethod;
+    private LocalDateTime createdAt;
     private List<BillItem> items;
 
     public int getId() { return id; }
@@ -28,6 +30,9 @@ public class Bill {
 
     public String getPaymentMethod() { return paymentMethod; }
     public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
     public List<BillItem> getItems() { return items; }
     public void setItems(List<BillItem> items) { this.items = items; }
