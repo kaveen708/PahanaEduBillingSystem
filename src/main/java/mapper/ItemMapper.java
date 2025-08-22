@@ -4,26 +4,24 @@ import dto.ItemDTO;
 import model.Item;
 
 public class ItemMapper {
-
     public static Item toEntity(ItemDTO dto) {
-        if (dto == null) return null;
         Item item = new Item();
-        item.setId(dto.getId());
         item.setItemCode(dto.getItemCode());
         item.setItemName(dto.getItemName());
+        item.setDescription(dto.getDescription()); // ← add
         item.setPrice(dto.getPrice());
         item.setQuantity(dto.getQuantity());
         return item;
     }
 
-    public static ItemDTO toDTO(Item entity) {
-        if (entity == null) return null;
+    public static ItemDTO toDTO(Item item) {
         ItemDTO dto = new ItemDTO();
-        dto.setId(entity.getId());
-        dto.setItemCode(entity.getItemCode());
-        dto.setItemName(entity.getItemName());
-        dto.setPrice(entity.getPrice());
-        dto.setQuantity(entity.getQuantity());
+        dto.setItemCode(item.getItemCode());
+        dto.setItemName(item.getItemName());
+        dto.setDescription(item.getDescription()); // ← add
+        dto.setPrice(item.getPrice());
+        dto.setQuantity(item.getQuantity());
         return dto;
     }
 }
+
