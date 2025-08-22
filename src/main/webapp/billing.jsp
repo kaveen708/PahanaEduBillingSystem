@@ -3,11 +3,135 @@
 <head>
   <title>Billing</title>
   <style>
-    body { font-family: Arial, sans-serif; }
-    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
-    th, td { border: 1px solid #ddd; padding: 8px; }
-    th { background: #f4f4f4; }
-    .right { text-align: right; }
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #0f0f15;
+      color: #eee;
+      margin: 0;
+      padding: 0 20px;
+    }
+
+    h2 {
+      text-align: center;
+      margin: 20px 0;
+      color: #00d4ff;
+    }
+
+    fieldset {
+      background: #1a1a2e;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 15px auto;
+      max-width: 900px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      border: none;
+    }
+
+    legend {
+      font-weight: 500;
+      font-size: 16px;
+      color: #00d4ff;
+    }
+
+    input[type="text"], input[type="number"], select {
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: none;
+      background: #27293d;
+      color: #eee;
+      font-size: 14px;
+      margin-right: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(45deg, #007bff, #00d4ff);
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+      font-weight: 500;
+      margin-top: 5px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,255,255,0.3);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #27293d;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background: linear-gradient(90deg, #27293d, #3b3f55);
+      color: #00d4ff;
+    }
+
+    tr {
+      border-bottom: 1px solid #333;
+      transition: 0.2s;
+    }
+
+    tr:hover {
+      background: #1e1e2f;
+    }
+
+    td.right {
+      text-align: right;
+    }
+
+    .actions {
+      display: flex;
+      gap: 5px;
+    }
+
+    .actions button {
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 6px;
+    }
+
+    .actions button.edit {
+      background: #007bff;
+    }
+
+    .actions button.delete {
+      background: #dc3545;
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 10px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .message.success { background: #28a745; color: #fff; }
+    .message.error { background: #dc3545; color: #fff; }
+
+    /* Responsive */
+    @media(max-width: 768px) {
+      input, select, button { width: 100%; margin: 5px 0; }
+      table { font-size: 12px; }
+    }
   </style>
   <script>
     function searchCustomer() {
