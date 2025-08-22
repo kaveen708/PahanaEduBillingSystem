@@ -22,6 +22,7 @@ public class AddCustomerServlet extends HttpServlet {
 
         req.setCharacterEncoding("UTF-8");
 
+        // Get form parameters
         String accountNumber = req.getParameter("accountNumber");
         String name = req.getParameter("name");
         String address = req.getParameter("address");
@@ -30,13 +31,21 @@ public class AddCustomerServlet extends HttpServlet {
         String unitsConsumedStr = req.getParameter("unitsConsumed");
         double unitsConsumed = 0;
 
+        // Retain entered values in case of error
+        req.setAttribute("accountNumber", accountNumber);
+        req.setAttribute("name", name);
+        req.setAttribute("address", address);
+        req.setAttribute("telephone", telephone);
+        req.setAttribute("unitsConsumed", unitsConsumedStr);
+
+        // Validate unitsConsumed
         if (unitsConsumedStr != null && !unitsConsumedStr.trim().isEmpty()) {
             try {
                 unitsConsumed = Double.parseDouble(unitsConsumedStr.trim());
             } catch (NumberFormatException e) {
                 req.setAttribute("error", "Units Consumed must be a valid number");
                 req.getRequestDispatcher("/add_customer.jsp").forward(req, resp);
-                return; // Stop further processing
+                return;
             }
         }
 
@@ -44,16 +53,19 @@ public class AddCustomerServlet extends HttpServlet {
 
         try {
             CustomerDTO created = customerService.createCustomer(dto);
+            req.setAttribute("message", "✅ Customer added successfully!");
+            req.setAttribute("messageType", "success");
             req.setAttribute("customer", created);
-            req.setAttribute("message", "Customer added successfully!");
-            req.getRequestDispatcher("/add_customer.jsp").forward(req, resp);
         } catch (IllegalArgumentException e) {
-            req.setAttribute("error", e.getMessage());
-            req.getRequestDispatcher("/add_customer.jsp").forward(req, resp);
+            req.setAttribute("message", "⚠️ " + e.getMessage());
+            req.setAttribute("messageType", "error");
         } catch (SQLException e) {
-            req.setAttribute("error", "Database error: " + e.getMessage());
-            req.getRequestDispatcher("/add_customer.jsp").forward(req, resp);
+            req.setAttribute("message", "❌ Database error: " + e.getMessage());
+            req.setAttribute("messageType", "error");
         }
+
+        // Forward back to JSP with message
+        req.getRequestDispatcher("/add_customer.jsp").forward(req, resp);
     }
 
     @Override
