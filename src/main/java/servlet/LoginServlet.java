@@ -19,18 +19,22 @@ public class LoginServlet extends HttpServlet {
 
         try {
             UserDTO user = service.login(username, password);
+
             if (user != null) {
                 HttpSession session = req.getSession();
                 session.setAttribute("user", user);
 
-                // set success message
-                session.setAttribute("successMsg", "✅ Login successful! Welcome " + user.getUsername());
-                resp.sendRedirect("dashboard.jsp");
-            } else {
-                // set error message
-                req.setAttribute("errorMsg", "❌ Invalid username or password!");
-                req.getRequestDispatcher("login.jsp").forward(req, resp);
+                // ✅ Instead of redirecting directly to dashboard
+                session.setAttribute("login_success", "Welcome " + user.getUsername() + "!");
+                resp.sendRedirect("login.jsp");
             }
+            else {
+                // ❌ Wrong credentials
+                HttpSession session = req.getSession();
+                session.setAttribute("login_error", "Invalid username or password!");
+                resp.sendRedirect("login.jsp");
+            }
+
         } catch (Exception e) {
             throw new ServletException(e);
         }
